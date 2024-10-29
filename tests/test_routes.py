@@ -171,6 +171,13 @@ class TestAccountService(TestCase):
         data = response.get_json()
         self.assertEqual(data["name"],"UpdatedName")
 
-        # assert that the resp.status_code is status.HTTP_200_OK
-        # get the data from resp.get_json() as updated_account
-        # assert that the updated_account["name"] is whatever you changed it to
+    def test_delete_account(self):
+        """It should Delete an Account"""
+        account = self._create_accounts(1)[0]
+        response = self.client.delete(f"accounts/{account.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_method_not_allowed(self):
+        """It should not allow illegal method calls to endpoint"""
+        resp = self.client.delete(BASE_URL)
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
