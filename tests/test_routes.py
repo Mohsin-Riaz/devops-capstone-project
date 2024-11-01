@@ -175,6 +175,27 @@ class TestAccountService(TestCase):
         data = response.get_json()
         self.assertEqual(data["name"], "UpdatedName")
 
+    def test_update_non_existing_account_(self):
+        """
+        It should NOT Update an Account
+        Account is Non existant
+        """
+
+        test_account = AccountFactory()
+        response = self.client.post(
+            "/accounts", json=test_account.serialize()
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        new_account = response.get_json()
+        new_account["id"] = "NONEXISTANT"
+
+        response = self.client.put(
+            f"/accounts/{new_account['id']}", json=new_account
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
     def test_delete_account(self):
         """It should Delete an Account"""
         account = self._create_accounts(1)[0]
