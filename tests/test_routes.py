@@ -176,10 +176,7 @@ class TestAccountService(TestCase):
         self.assertEqual(data["name"], "UpdatedName")
 
     def test_update_non_existing_account_(self):
-        """
-        It should NOT Update an Account
-        Account is Non existant
-        """
+        """It should NOT Update a Non existant Account"""
 
         test_account = AccountFactory()
         response = self.client.post(
